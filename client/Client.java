@@ -13,14 +13,16 @@ public class Client {
         DataInputStream input;
         DataOutputStream out;
         Scanner scanner;
+        String name;
         try {
+            System.out.println("Enter your name: ");
+            scanner = new Scanner(System.in);
+            name = scanner.nextLine();
             socket = new Socket("192.168.1.67", 8188);
-            System.out.println("Connect");
             input = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
-            String response = input.readUTF();
-            System.out.println("Server answer: " + response);
-            scanner = new Scanner(System.in);
+            /*String response = input.readUTF();
+            System.out.println(response);*/
 
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -28,7 +30,7 @@ public class Client {
                     while (true) {
                         try {
                             String response = input.readUTF();
-                            System.out.println("Server answer: " + response);
+                            System.out.println(response);
                         } catch (IOException exception) {
                             exception.printStackTrace();
                         }
@@ -39,7 +41,9 @@ public class Client {
 
             while (true) {
                 String request = scanner.nextLine();
-                out.writeUTF(request);
+                if (request.equals("exit"))
+                    break;
+                out.writeUTF(name + ": " + request);
             }
 
         } catch (UnknownHostException e) {

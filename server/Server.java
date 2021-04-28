@@ -22,12 +22,13 @@ public class Server {
                         try {
                             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
                             DataInputStream input = new DataInputStream(socket.getInputStream());
-                            out.writeUTF("Welcome to server");
+                            out.writeUTF("Server: Welcome to server");
                             while (true) {
                                 String request = input.readUTF();
                                 for (Socket user : users) {
                                     DataOutputStream userOut = new DataOutputStream(user.getOutputStream());
-                                    userOut.writeUTF(request.toUpperCase());
+                                    if (!user.equals(socket))
+                                        userOut.writeUTF(request.split(": ")[0] + ": " + request.split(": ")[1].toUpperCase());
                                 }
                             }
                         } catch (IOException exception) {
@@ -42,3 +43,9 @@ public class Server {
         }
     }
 }
+
+/*
+1) Спросить у подключившегося пользователя его имя.
+2) Рассылая сообщения необходимо писать имя того, от кого сообщение.
+3) Не присылать сообщение клиенту который его отправил
+*/
