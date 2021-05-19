@@ -13,17 +13,11 @@ public class Client {
         DataInputStream input;
         DataOutputStream out;
         Scanner scanner;
-        String name;
         try {
-            System.out.println("Enter your name: ");
             scanner = new Scanner(System.in);
-            name = scanner.nextLine();
-            socket = new Socket("192.168.1.67", 8188);
+            socket = new Socket("45.80.70.161", 8188);
             input = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
-            /*String response = input.readUTF();
-            System.out.println(response);*/
-
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -38,14 +32,12 @@ public class Client {
                 }
             });
             thread.start();
-
             while (true) {
                 String request = scanner.nextLine();
                 if (request.equals("exit"))
                     break;
-                out.writeUTF(name + ": " + request);
+                out.writeUTF(request);
             }
-
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
